@@ -13,8 +13,16 @@ fi
 IMAGE_NAME=$1
 TAG_VERSION=$2
 
-for NODE_VERSION in 12 14 16
+for NODE_VERSION in 10 12 14 16
 do
-	bash build.sh ${IMAGE_NAME} ${TAG_VERSION} ${NODE_VERSION}
-  docker push ${IMAGE_NAME}:${TAG_VERSION}-${NODE_VERSION}
+  # amd64
+	bash build.sh ${IMAGE_NAME} ${TAG_VERSION} ${NODE_VERSION} amd64
+  docker push ${IMAGE_NAME}:${TAG_VERSION}-${NODE_VERSION}-amd64
+  # arm64
+	bash build.sh ${IMAGE_NAME} ${TAG_VERSION} ${NODE_VERSION} arm64
+  docker push ${IMAGE_NAME}:${TAG_VERSION}-${NODE_VERSION}-arm64
+
+  # manifest
+  docker manifest create ${IMAGE_NAME}:${TAG_VERSION}-${NODE_VERSION} --amend ${IMAGE_NAME}:${TAG_VERSION}-${NODE_VERSION}-amd64 --amend ${IMAGE_NAME}:${TAG_VERSION}-${NODE_VERSION}-arm64
+  docker manifest push ${IMAGE_NAME}:${TAG_VERSION}-${NODE_VERSION}
 done

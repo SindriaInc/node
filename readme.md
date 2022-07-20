@@ -1,6 +1,6 @@
 # Node
 
-Sindria Base Image based on official node base image.
+Sindria Base Image based on official node alpine base image.
 
 ## Platforms
 
